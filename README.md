@@ -1,4 +1,8 @@
-# High-life RP Website
+# free website fivem server and Whitelist applications
+https://tshentro.tebex.io/
+
+
+https://www.youtube.com/watch?v=PC0Mrz61Mys
 
 Professional FiveM roleplay community website with Discord authentication, whitelist/staff/job applications, admin review tools, and customizable branding.
 
@@ -94,7 +98,3 @@ JOBS_ADMIN_DISCORD_IDS=id1,id2
 4. Deploy.
 
 If your production database already has tables, you may need to baseline migrations before running `prisma migrate deploy`.
-
-## License
-
-Private project for your RP community. Add your preferred license if you plan to open-source it.
