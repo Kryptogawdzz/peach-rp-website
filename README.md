@@ -4,7 +4,8 @@
 - https://ko-fi.com/tshentrotech
 
 ## MY TEBEX STORE
-https://tshentro.tebex.io/
+If you'd like to support me, you can simply buy anything from my store. Thank you from the bottom of my heart.
+# 👉 https://tshentro.tebex.io
 
 ## Youtube 
 https://www.youtube.com/watch?v=PC0Mrz61Mys
