@@ -343,7 +343,6 @@ export default async function HomePage() {
                   src={`https://discord.com/widget?id=${branding.discordWidgetServerId.trim()}&theme=dark`}
                   width="100%"
                   height="360"
-                  allowTransparency
                   frameBorder="0"
                   sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                   title="Discord server"

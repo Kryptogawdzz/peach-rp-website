@@ -1,20 +1,24 @@
-# free website fivem server and Whitelist applications
+# Free FiveM Website + Whitelist Applications
+
 ## Support My Development Time
 
 - https://ko-fi.com/tshentrotech
 
-## MY TEBEX STORE
-# If you'd like to support me, you can simply buy anything from my store. Thank you from the bottom of my heart.
-# 👉 https://tshentro.tebex.io
+## My Tebex Store
 
-## Youtube 
-https://www.youtube.com/watch?v=PC0Mrz61Mys
+If you'd like to support me, you can buy anything from my store:
 
-Professional FiveM roleplay community website with Discord authentication, whitelist/staff/job applications, admin review tools, and customizable branding.
+- https://tshentro.tebex.io
 
-## What This Project Includes
+## YouTube
 
-- Discord OAuth login (`NextAuth`)
+- https://www.youtube.com/watch?v=PC0Mrz61Mys
+
+Open-source FiveM roleplay community website with Discord authentication, whitelist/staff/job applications, admin review tools, and customizable branding.
+
+## Features
+
+- Discord OAuth login with `NextAuth`
 - Public whitelist application form
 - Staff application form
 - Job application system
@@ -49,7 +53,7 @@ copy .env.example .env
 
 3. Fill required values in `.env` (database + Discord + NextAuth).
 
-4. Start development:
+4. Run development server:
 
 ```bash
 npm run dev
@@ -96,6 +100,8 @@ JOBS_ADMIN_DISCORD_IDS=id1,id2
 - Deployment guide: `DEPLOY.md`
 - Site text/branding config: `src/config/config-site.ts`
 
+## CFX Release Notes
+
 ## Deploy to Vercel
 
 1. Push this project to GitHub.
@@ -104,3 +110,12 @@ JOBS_ADMIN_DISCORD_IDS=id1,id2
 4. Deploy.
 
 If your production database already has tables, you may need to baseline migrations before running `prisma migrate deploy`.
+
+- Type: Free release
+- Source code: Open source
+- Support: No
+- Download: [GitHub repository](https://github.com/TshentroTech/free-website-fivem-server-and-Whitelist-applications)
+
+## License
+
+This project is source-available under a custom non-commercial license. See `LICENSE` for full terms.
