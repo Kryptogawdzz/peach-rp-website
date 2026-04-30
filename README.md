@@ -63,6 +63,7 @@ npm run dev
 
 ## Required Environment Variables
 
+Create a file named ` .env `. And copy this 👇
 ```env
 # Database — MUST be PostgreSQL (postgresql:// or postgres://). Do NOT use file:./dev.db.
 # Get a connection string from: Vercel (Storage → Postgres), Neon, Supabase, or any Postgres host.
