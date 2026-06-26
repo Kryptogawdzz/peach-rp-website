@@ -27,10 +27,10 @@ export type DmApplicationTemplate = {
 const CONFIG_SITE = {
   // ─── Site & branding ─────────────────────────────────────────────────────
   /** Display name of the server (DMs, footer, branding) */
-  serverName: " t̴s̴h̶e̷n̶t̵r̵o̴.̴t̵e̷c̵h",
+  serverName: "Peach RP",
 
   /** Site name shown in the header */
-  siteName: "t̴s̴h̶e̷n̶t̵r̵o̴.̴t̵e̷c̵h" ,
+  siteName: "Peach RP",
 
   /** Icon or short label next to site name in header */
   headerIcon: "RP",
@@ -42,14 +42,14 @@ const CONFIG_SITE = {
   storeNavLabel: "Store",
 
   /** Public Discord invite URL (footer "Connect" button and links) */
-  discordInviteUrl: "https://discord.gg/DWdM4h7xbj",
+  discordInviteUrl: "https://discord.gg/SshDTEmsx",
 
   /** Discord server ID for the footer widget iframe (leave empty "" to hide the widget) */
-  discordWidgetServerId: "1251722749819359272",
+  discordWidgetServerId: "",
 
   /** Homepage subtitle under the title (use {serverName} to insert the server name) */
   homepageSubtitle:
-    "Welcome to the first roleplay server in Tunisia created with no restrictions and no access privileges.We are proud to be the Tunisian RP server without a whitelist, open to everyone.Everyone can play. Everyone is welcome. Come and experience RP the easy way — welcome to our server! {serverName}.",
+    "Welcome to {serverName} — a custom QBX FiveM roleplay server. Serious roleplay, an active staff team, and a growing community built for long-term stories. Apply for whitelist below to get started.",
 
   /** Store page title */
   storePageTitle: "Server Store",
@@ -64,23 +64,21 @@ const CONFIG_SITE = {
   /** Label for the banner button (set empty string "" to hide the button) */
   topBannerCtaLabel: "Server Store",
   /** URL opened when clicking the banner button (falls back to discordInviteUrl if empty) */
-  topBannerCtaUrl: "https://tshentro.tebex.io",
+  topBannerCtaUrl: "",
   /** Optional: cycle through multiple banner messages */
   topBannerMessages: [
-    "Tunisia High-life RP is live now — join the city and start your story today.",
-    "Welcome to Tunisia High-life RP — where your story begins. The city is now live.",
-    "Your new life starts here. Tunisia High-life RP is now live — enter the city today.",
-    "High-life RP Tunisia is LIVE — are you ready?",
-    "A new city. A new life. Tunisia High-life RP is now live — your story begins now.",
-    "Step into Tunisia High-life RP — an exclusive roleplay experience now live.",
+    "Peach RP is live now — join the city and start your story today.",
+    "Welcome to Peach RP — where your story begins. The city is now live.",
+    "Your new life starts here. Peach RP is now live — enter the city today.",
+    "Peach RP is LIVE — are you ready?",
   ],
 
   // ─── Footer ───────────────────────────────────────────────────────────────
   /** Small badge text above tagline (e.g.  or your brand) */
-  footerBadgeLabel: "t̴s̴h̶e̷n̶t̵r̵o̴.̴t̵e̷c̵h",
+  footerBadgeLabel: "Peach RP",
 
   /** Uppercase tagline under the badge */
-  footerTagline: "FROM THE STREETS TO THE GENERATIONS",
+  footerTagline: "YOUR STORY STARTS HERE",
 
   /** Short description paragraph in the footer */
   footerDescription:
@@ -201,21 +199,23 @@ const CONFIG_SITE = {
     { id: "inGameName", label: "Your in-game name", type: "text" as const, required: true, placeholder: "Your character name" },
     { id: "age", label: "Your age", type: "number" as const, required: true, placeholder: "18" },
     { id: "timezone", label: "Discord ID", type: "text" as const, required: true, placeholder: "Discord ID" },
-    { id: "experience", label: "Why do you want to play on Highlife?", type: "textarea" as const, required: true, placeholder: "Explain why you want to play on Highlife" },
-    { id: "motivation", label: "Who told you about Highlife?", type: "textarea" as const, required: true, placeholder: "Example: I heard about Highlife because it's one of the best servers in Tunisia" },
+    { id: "experience", label: "Why do you want to play on Peach RP?", type: "textarea" as const, required: true, placeholder: "Explain why you want to play on Peach RP" },
+    { id: "motivation", label: "Who told you about Peach RP?", type: "textarea" as const, required: true, placeholder: "Example: A friend recommended it / I found it online" },
     { id: "characterStory", label: "How long have you been playing RP?", type: "textarea" as const, required: true, placeholder: "How long have you been playing RP, and what made you start?" },
     { id: "additionalInfo", label: "Did you read and memorize the rules?", type: "textarea" as const, required: false, placeholder: "Example: Yes, I memorized them / No, not yet" },
   ] as const,
 
   // ─── City businesses (jobs list) ───────────────────────────────────────────
   businesses: [
-    { id: "hospital", name: "Pillbox Medical Center", category: "MEDICAL", description: "Hospital and EMS" },
-    { id: "lspd", name: "LSPD", category: "EMERGENCY SERVICES", description: "Law enforcement" },
+    { id: "peach-pd", name: "Peach PD", category: "EMERGENCY SERVICES", description: "Law enforcement" },
+    { id: "peach-medical", name: "Peach Medical Center", category: "MEDICAL", description: "Hospital and EMS" },
+    { id: "peach-realty", name: "Peach Realty", category: "BUSINESS", description: "Property sales and rentals" },
+    { id: "peach-mechanics", name: "Peach Mechanics", category: "BUSINESS", description: "Vehicle repair and customization" },
   ] as const,
 
   // ─── Staff application form questions ──────────────────────────────────────
   staffApplicationQuestions: [
-    { id: "role", label: "What made you want to join the Highlife staff team?", type: "select" as const, required: true, options: ["Support", "Development", "PARTNERSHIP"] },
+    { id: "role", label: "What made you want to join the Peach RP staff team?", type: "select" as const, required: true, options: ["Support", "Development", "PARTNERSHIP"] },
     { id: "age", label: "Age", type: "text" as const, required: true, placeholder: "e.g. 18" },
     { id: "experience", label: "Do you have previous staff experience?", type: "textarea" as const, required: false },
     { id: "availability", label: "How many hours can you be active as staff per day?", type: "text" as const, required: true },
