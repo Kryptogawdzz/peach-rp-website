@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useSession } from "next-auth/react";
 import { useToast } from "@/components/toast";
 import type {
   FormQuestionDefinition,
@@ -9,6 +10,7 @@ import type {
   FormType,
 } from "@/lib/form-questions";
 import {
+  getManageableFormTypeOptions,
   WHITELIST_REQUIRED_QUESTION_KEYS,
   WHITELIST_RESERVED_QUESTION_KEYS,
 } from "@/lib/form-questions";
@@ -58,12 +60,25 @@ function toEditorState(question: FormQuestionDefinition): EditorState {
 }
 
 export function AdminFormQuestionManager() {
+  const { data: session } = useSession();
   const toast = useToast();
+  const adminType = (session?.user as { adminType?: string | null } | undefined)?.adminType;
+  const formTypeOptions = useMemo(
+    () => getManageableFormTypeOptions(adminType),
+    [adminType]
+  );
   const [formType, setFormType] = useState<FormType>("whitelist");
   const [questions, setQuestions] = useState<FormQuestionDefinition[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editor, setEditor] = useState<EditorState>(EMPTY_EDITOR);
+
+  useEffect(() => {
+    if (formTypeOptions.length === 0) return;
+    if (!formTypeOptions.some((option) => option.id === formType)) {
+      setFormType(formTypeOptions[0].id);
+    }
+  }, [formTypeOptions, formType]);
 
   useEffect(() => {
     setLoading(true);
@@ -153,26 +168,38 @@ export function AdminFormQuestionManager() {
     toast.addToast("Question deleted", "success");
   }
 
+  if (formTypeOptions.length === 0) {
+    return (
+      <p className="text-zinc-500">
+        You do not have permission to manage application forms.
+      </p>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap gap-2">
-        {(["whitelist", "staff"] as const).map((type) => (
-          <button
-            key={type}
-            type="button"
-            onClick={() => {
-              setFormType(type);
-              resetEditor();
-            }}
-            className={`rounded-lg px-4 py-3 text-sm font-medium transition ${
-              formType === type
-                ? "brand-bg"
-                : "border border-zinc-700 bg-zinc-900 text-zinc-300 hover:bg-zinc-800"
-            }`}
-          >
-            {type === "whitelist" ? "Whitelist form" : "Staff form"}
-          </button>
-        ))}
+      <div className="space-y-2">
+        <label htmlFor="form-type-select" className="block text-sm font-medium text-zinc-300">
+          Form to edit
+        </label>
+        <select
+          id="form-type-select"
+          value={formType}
+          onChange={(event) => {
+            setFormType(event.target.value as FormType);
+            resetEditor();
+          }}
+          className={inputClass}
+        >
+          {formTypeOptions.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <p className="text-xs text-zinc-500">
+          Job forms appear as &quot;Peach PD (job)&quot;, &quot;Gun Plug (job)&quot;, etc. Gang has its own form.
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-zinc-800 bg-zinc-900/60 p-4">

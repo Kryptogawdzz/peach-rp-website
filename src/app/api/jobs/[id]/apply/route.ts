@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { createAuditLog } from "@/lib/audit";
 import { getClientIp } from "@/lib/request";
 import { ensureSubmissionAllowed } from "@/lib/submission-guards";
+import { getFormQuestions, getJobFormTypeForJobTitle, validateAnswers } from "@/lib/form-questions";
 
 export async function POST(
   request: Request,
@@ -20,6 +21,24 @@ export async function POST(
   if (!job) {
     return NextResponse.json({ error: "Job not found" }, { status: 404 });
   }
+
+  const formType = getJobFormTypeForJobTitle(job.title);
+  if (!formType) {
+    return NextResponse.json({ error: "Job is not configured for applications" }, { status: 400 });
+  }
+
+  const body = await request.json().catch(() => null);
+  const answers = body && typeof body === "object" ? (body as { answers?: unknown }).answers : null;
+  if (!answers || typeof answers !== "object") {
+    return NextResponse.json({ error: "Missing or invalid answers" }, { status: 400 });
+  }
+
+  const questionDefinitions = await getFormQuestions(formType);
+  const validation = validateAnswers(questionDefinitions, answers as Record<string, unknown>);
+  if (!validation.ok) {
+    return NextResponse.json({ error: validation.error }, { status: 400 });
+  }
+
   const existing = await prisma.jobApplication.findUnique({
     where: { jobId_userId: { jobId, userId } },
   });
@@ -46,6 +65,7 @@ export async function POST(
     data: {
       jobId,
       userId,
+      answers: JSON.stringify(validation.normalized),
       submitterIp: ipAddress,
       submitterDiscordId: discordId,
     },
@@ -60,9 +80,8 @@ export async function POST(
     targetDiscordId: application.user.discordId,
     ipAddress,
     metadata: {
-      status: application.status,
-      jobId,
       jobTitle: application.job.title,
+      status: application.status,
     },
   });
   return NextResponse.json(application);

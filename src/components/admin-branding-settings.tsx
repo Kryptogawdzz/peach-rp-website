@@ -72,6 +72,10 @@ const EMPTY_SETTINGS: BrandingSettings = {
       accepted: { reasonDefault: "", nextSteps: [], footerNote: "" },
       rejected: { reasonDefault: "", nextSteps: [], footerNote: "" },
     },
+    gang: {
+      accepted: { reasonDefault: "", nextSteps: [], footerNote: "" },
+      rejected: { reasonDefault: "", nextSteps: [], footerNote: "" },
+    },
   },
   homepage: normalizeHomepageContent(defaultHomepageContent),
   logsWebhookUrl: null,

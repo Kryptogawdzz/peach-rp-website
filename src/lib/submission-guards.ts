@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 export const APPLICATION_COOLDOWN_MS = 10 * 60 * 1000;
 
-type SubmissionKind = "whitelist" | "staff" | "job";
+type SubmissionKind = "whitelist" | "staff" | "job" | "gang";
 
 type GuardInput = {
   kind: SubmissionKind;
@@ -30,7 +30,7 @@ export async function ensureSubmissionAllowed(input: GuardInput): Promise<GuardR
   const now = Date.now();
   const since = new Date(now - APPLICATION_COOLDOWN_MS);
 
-  const [recentWhitelist, recentStaff, recentJob] = await Promise.all([
+  const [recentWhitelist, recentStaff, recentJob, recentGang] = await Promise.all([
     prisma.application.findFirst({
       where: submissionWhere(input, since),
       orderBy: { createdAt: "desc" },
@@ -46,9 +46,14 @@ export async function ensureSubmissionAllowed(input: GuardInput): Promise<GuardR
       orderBy: { createdAt: "desc" },
       select: { createdAt: true },
     }),
+    prisma.gangApplication.findFirst({
+      where: submissionWhere(input, since),
+      orderBy: { createdAt: "desc" },
+      select: { createdAt: true },
+    }),
   ]);
 
-  const latestRecent = [recentWhitelist, recentStaff, recentJob]
+  const latestRecent = [recentWhitelist, recentStaff, recentJob, recentGang]
     .filter((entry): entry is { createdAt: Date } => Boolean(entry))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
 
@@ -94,6 +99,24 @@ export async function ensureSubmissionAllowed(input: GuardInput): Promise<GuardR
         ok: false,
         status: 409,
         error: "You already have a staff application pending review.",
+      };
+    }
+  }
+
+  if (input.kind === "gang") {
+    const pending = await prisma.gangApplication.findFirst({
+      where: {
+        userId: input.userId,
+        status: "pending",
+      },
+      select: { id: true },
+    });
+
+    if (pending) {
+      return {
+        ok: false,
+        status: 409,
+        error: "You already have a gang application pending review.",
       };
     }
   }

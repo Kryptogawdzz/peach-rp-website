@@ -23,7 +23,7 @@ function truncate(str: string, max: number): string {
   return str.slice(0, max - 3) + "...";
 }
 
-export type DmApplicationType = "whitelist" | "job" | "staff";
+export type DmApplicationType = "whitelist" | "job" | "staff" | "gang";
 
 /** Payload for whitelist DMs (team application) */
 export type WhitelistDmPayload = {
@@ -50,7 +50,15 @@ export type StaffDmPayload = {
   reviewedAt: Date | null;
 };
 
-export type DecisionDmPayload = WhitelistDmPayload | JobDmPayload | StaffDmPayload;
+/** Payload for gang application DMs */
+export type GangDmPayload = {
+  type: "gang";
+  user: { discordId: string; username: string };
+  adminNotes: string | null;
+  reviewedAt: Date | null;
+};
+
+export type DecisionDmPayload = WhitelistDmPayload | JobDmPayload | StaffDmPayload | GangDmPayload;
 export type DecisionDmStatus = "approved" | "rejected" | "device_check";
 
 export type BroadcastDmPayload = {
@@ -97,6 +105,8 @@ function getApplicationTypeLabel(type: DecisionDmPayload["type"]): string {
       return "Job";
     case "staff":
       return "Staff";
+    case "gang":
+      return "Gang";
     default:
       return "Application";
   }

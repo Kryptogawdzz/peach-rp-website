@@ -4,8 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { createAuditLog } from "@/lib/audit";
 import { getClientIp } from "@/lib/request";
 import {
+  canManageFormType,
   getFormQuestions,
   normalizeQuestionKey,
+  parseFormType,
   serializeQuestionOptions,
   type FormQuestionLayout,
   type FormQuestionType,
@@ -13,14 +15,6 @@ import {
   WHITELIST_REQUIRED_QUESTION_KEYS,
   WHITELIST_RESERVED_QUESTION_KEYS,
 } from "@/lib/form-questions";
-
-function canManageFormType(adminType: string | null | undefined, formType: FormType): boolean {
-  if (adminType === "full") return true;
-  if (formType === "whitelist" || formType === "staff") {
-    return adminType === "team";
-  }
-  return false;
-}
 
 function parseType(value: unknown): FormQuestionType | null {
   return value === "text" || value === "textarea" || value === "number" || value === "select"

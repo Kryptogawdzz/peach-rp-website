@@ -192,6 +192,28 @@ const CONFIG_SITE = {
         footerNote: "Thanks for wanting to help out. We appreciate it.",
       },
     },
+    gang: {
+      accepted: {
+        reasonDefault:
+          "Your gang application looks good. Leadership will reach out with next steps.",
+        nextSteps: [
+          "Stay active on Discord for leadership contact",
+          "Review gang and criminal RP rules",
+          "Wait for in-game onboarding from leadership",
+        ],
+        footerNote: "Questions? Contact gang leadership or staff on Discord.",
+      },
+      rejected: {
+        reasonDefault:
+          "We're not moving forward with this gang application right now.",
+        nextSteps: [
+          "Review our criminal RP and gang rules",
+          "You may reapply later if openings remain",
+          "Reach out on Discord if you have questions",
+        ],
+        footerNote: "Thanks for applying.",
+      },
+    },
   } as const satisfies Record<string, DmApplicationTemplate>,
 
   // ─── Whitelist application form questions ─────────────────────────────────
@@ -211,6 +233,60 @@ const CONFIG_SITE = {
     { id: "peach-medical", name: "Peach Medical Center", category: "MEDICAL", description: "Hospital and EMS" },
     { id: "peach-realty", name: "Peach Realty", category: "BUSINESS", description: "Property sales and rentals" },
     { id: "peach-mechanics", name: "Peach Mechanics", category: "BUSINESS", description: "Vehicle repair and customization" },
+    { id: "gun-plug", name: "Gun Plug", category: "CRIMINAL", description: "Underground firearms supply" },
+    { id: "drug-plug", name: "Drug Plug", category: "CRIMINAL", description: "Underground narcotics supply" },
+  ] as const,
+
+  // ─── Job application form questions (per business id; edit in Admin → Forms) ─
+  jobApplicationQuestions: {
+    default: [
+      { id: "in_game_name", label: "In-game name", type: "text" as const, required: true, placeholder: "Your character name" },
+      { id: "experience", label: "Relevant experience for this role", type: "textarea" as const, required: true },
+      { id: "availability", label: "When are you usually active?", type: "text" as const, required: true },
+      { id: "why", label: "Why do you want this role?", type: "textarea" as const, required: true },
+    ],
+    "peach-pd": [
+      { id: "in_game_name", label: "In-game name", type: "text" as const, required: true, placeholder: "Your character name" },
+      { id: "age", label: "Character age", type: "number" as const, required: true, placeholder: "21" },
+      { id: "experience", label: "Previous law enforcement RP experience", type: "textarea" as const, required: true },
+      { id: "scenario", label: "Describe how you would handle a traffic stop", type: "textarea" as const, required: true },
+      { id: "availability", label: "Hours per week you can patrol", type: "text" as const, required: true },
+    ],
+    "peach-medical": [
+      { id: "in_game_name", label: "In-game name", type: "text" as const, required: true, placeholder: "Your character name" },
+      { id: "certifications", label: "Medical certifications or training (RP)", type: "textarea" as const, required: true },
+      { id: "experience", label: "Previous EMS / medical RP experience", type: "textarea" as const, required: true },
+      { id: "scenario", label: "How would you treat a gunshot wound on scene?", type: "textarea" as const, required: true },
+      { id: "availability", label: "When are you usually available for EMS?", type: "text" as const, required: true },
+    ],
+    "peach-realty": [
+      { id: "in_game_name", label: "In-game name", type: "text" as const, required: true, placeholder: "Your character name" },
+      { id: "experience", label: "Sales or real estate RP experience", type: "textarea" as const, required: true },
+      { id: "communication", label: "How do you handle difficult clients?", type: "textarea" as const, required: true },
+      { id: "availability", label: "Hours per week you can work", type: "text" as const, required: true },
+    ],
+    "gun-plug": [
+      { id: "in_game_name", label: "In-game name", type: "text" as const, required: true, placeholder: "Your character name" },
+      { id: "connections", label: "Who vouches for you in the city?", type: "textarea" as const, required: true },
+      { id: "experience", label: "Previous criminal / plug RP experience", type: "textarea" as const, required: true },
+      { id: "operations", label: "How would you run operations without heat?", type: "textarea" as const, required: true },
+    ],
+    "drug-plug": [
+      { id: "in_game_name", label: "In-game name", type: "text" as const, required: true, placeholder: "Your character name" },
+      { id: "connections", label: "Who vouches for you in the city?", type: "textarea" as const, required: true },
+      { id: "experience", label: "Previous drug / plug RP experience", type: "textarea" as const, required: true },
+      { id: "operations", label: "How would you distribute without drawing police?", type: "textarea" as const, required: true },
+    ],
+  } as const,
+
+  // ─── Gang application form questions ───────────────────────────────────────
+  gangApplicationQuestions: [
+    { id: "gang_name", label: "Gang / set name", type: "text" as const, required: true, placeholder: "Your gang name" },
+    { id: "in_game_name", label: "Your in-game name (leader or rep)", type: "text" as const, required: true },
+    { id: "members", label: "How many active members do you have?", type: "number" as const, required: true, placeholder: "5" },
+    { id: "territory", label: "What territory or turf are you claiming?", type: "textarea" as const, required: true },
+    { id: "story", label: "Gang backstory and RP goals", type: "textarea" as const, required: true },
+    { id: "rules", label: "Confirm you read criminal and gang RP rules", type: "select" as const, required: true, options: ["Yes, I read and agree", "Not yet"] },
   ] as const,
 
   // ─── Staff application form questions ──────────────────────────────────────

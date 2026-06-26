@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import { getFormQuestions, type FormType } from "@/lib/form-questions";
-
-function parseFormType(value: string | null): FormType | null {
-  return value === "whitelist" || value === "staff" ? value : null;
-}
+import { getFormQuestions, parseFormType } from "@/lib/form-questions";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -11,7 +7,7 @@ export async function GET(request: Request) {
 
   if (!formType) {
     return NextResponse.json(
-      { error: "formType must be 'whitelist' or 'staff'" },
+      { error: "Invalid formType. Use whitelist, staff, gang, or job:<business-id>." },
       { status: 400 }
     );
   }

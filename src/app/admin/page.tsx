@@ -7,6 +7,7 @@ import { AdminApplicationList } from "@/components/admin-application-list";
 import { AdminAuditLogList } from "@/components/admin-audit-log-list";
 import { AdminBrandingSettings } from "@/components/admin-branding-settings";
 import { AdminFormQuestionManager } from "@/components/admin-form-question-manager";
+import { AdminGangApplicationList } from "@/components/admin-gang-application-list";
 import { AdminJobApplicationList } from "@/components/admin-job-application-list";
 import { AdminStaffApplicationList } from "@/components/admin-staff-application-list";
 import { AdminMembersList } from "@/components/admin-members-list";
@@ -18,6 +19,7 @@ import { canManageStore } from "@/lib/store";
 type AdminTab =
   | "whitelist"
   | "jobs"
+  | "gang"
   | "staff"
   | "store"
   | "members"
@@ -40,10 +42,11 @@ export default function AdminPage() {
   const canManageBranding = adminType === "full";
   const canManageRules = userCanManageRules(adminType);
   const canViewLogs = canViewAuditLogs(adminType);
-  const canManageForms = canManageWhitelist || canManageStaff;
+  const canManageForms = canManageWhitelist || canManageStaff || canManageJobs;
   const activeTab = useMemo<AdminTab>(() => {
     if (tab === "whitelist" && canManageWhitelist) return tab;
     if (tab === "jobs" && canManageJobs) return tab;
+    if (tab === "gang" && canManageJobs) return tab;
     if (tab === "staff" && canManageStaff) return tab;
     if (tab === "store" && canManageStoreCatalog) return tab;
     if (tab === "members" && canManageMembers) return tab;
@@ -178,6 +181,19 @@ export default function AdminPage() {
             Jobs & city positions
           </button>
         )}
+        {canManageJobs && (
+          <button
+            type="button"
+            onClick={() => setTab("gang")}
+            className={`rounded-lg border px-4 py-3 text-sm font-medium transition sm:rounded-none sm:border-x-0 sm:border-t-0 sm:border-b-2 sm:py-2 ${
+              activeTab === "gang"
+                ? "brand-border brand-text bg-zinc-100/80 dark:bg-zinc-900/80"
+                : "border-zinc-200 text-zinc-500 hover:text-zinc-700 dark:border-zinc-800 dark:hover:text-zinc-300"
+            }`}
+          >
+            Gang applications
+          </button>
+        )}
         {canManageStaff && (
           <button
             type="button"
@@ -276,6 +292,8 @@ export default function AdminPage() {
             ? "Whitelist (team)"
             : activeTab === "jobs"
               ? "Jobs & city positions"
+              : activeTab === "gang"
+                ? "Gang applications"
               : activeTab === "staff"
                 ? "Staff applications"
                 : activeTab === "store"
@@ -295,6 +313,7 @@ export default function AdminPage() {
 
       {activeTab === "whitelist" && <AdminApplicationList />}
       {activeTab === "jobs" && <AdminJobApplicationList />}
+      {activeTab === "gang" && <AdminGangApplicationList />}
       {activeTab === "staff" && <AdminStaffApplicationList />}
       {activeTab === "store" && <AdminStoreManager />}
       {activeTab === "members" && <AdminMembersList isFullAdmin={adminType === "full"} />}

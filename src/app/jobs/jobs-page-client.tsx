@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useToast } from "@/components/toast";
 
 const CATEGORY_COLORS: Record<string, string> = {
   "EMERGENCY SERVICES": "brand-soft brand-text ring-rose-500/30",
@@ -41,9 +40,7 @@ export function JobsPageClient({
   configHasJobs = false,
 }: Props) {
   const { data: session } = useSession();
-  const toast = useToast();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [applyingId, setApplyingId] = useState<string | null>(null);
 
   const filtered =
     selectedCategory === null
@@ -51,24 +48,6 @@ export function JobsPageClient({
       : initialJobs.filter((j) => j.category === selectedCategory);
 
   const salaryDollars = (tier: number) => "$".repeat(Math.min(4, Math.max(1, tier)));
-
-  async function handleApply(jobId: string) {
-    setApplyingId(jobId);
-    try {
-      const res = await fetch(`/api/jobs/${jobId}/apply`, { method: "POST" });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        toast.addToast(data.error || "Failed to apply", "error");
-        return;
-      }
-      toast.addToast("Application submitted. We'll review it soon.", "success");
-      setTimeout(() => {
-        window.location.href = "/applications?tab=jobs";
-      }, 1200);
-    } finally {
-      setApplyingId(null);
-    }
-  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -174,14 +153,12 @@ export function JobsPageClient({
               </ul>
 
               {session ? (
-                <button
-                  type="button"
-                  onClick={() => handleApply(job.id)}
-                  disabled={applyingId === job.id}
-                  className="brand-bg rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                <Link
+                  href={`/jobs/${job.id}/apply`}
+                  className="brand-bg rounded-xl px-4 py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition hover:opacity-90"
                 >
-                  {applyingId === job.id ? "Submitting..." : "Start Application"}
-                </button>
+                  Start Application
+                </Link>
               ) : (
                 <Link
                   href="/api/auth/signin/discord?callbackUrl=/jobs"

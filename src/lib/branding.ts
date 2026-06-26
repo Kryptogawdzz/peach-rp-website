@@ -5,7 +5,7 @@ import {
   type HomepageContent,
 } from "@/lib/homepage-content";
 
-export type DmTemplateMap = Record<"whitelist" | "job" | "staff", DmApplicationTemplate>;
+export type DmTemplateMap = Record<"whitelist" | "job" | "staff" | "gang", DmApplicationTemplate>;
 
 export type BrandingSettings = {
   serverName: string;
@@ -169,6 +169,7 @@ function normalizeDmTemplates(
     whitelist: normalizeDmApplicationTemplate(value?.whitelist, fallback.whitelist),
     job: normalizeDmApplicationTemplate(value?.job, fallback.job),
     staff: normalizeDmApplicationTemplate(value?.staff, fallback.staff),
+    gang: normalizeDmApplicationTemplate(value?.gang, fallback.gang),
   };
 }
 

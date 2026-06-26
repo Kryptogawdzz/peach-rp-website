@@ -24,9 +24,11 @@ model User {
   applications  Application[]
   jobApplications JobApplication[]
   staffApplications StaffApplication[]
+  gangApplications GangApplication[]
   reviewedApplications   Application[]       @relation("ApplicationReviewer")
   reviewedJobApplications JobApplication[]   @relation("JobApplicationReviewer")
   reviewedStaffApplications StaffApplication[] @relation("StaffApplicationReviewer")
+  reviewedGangApplications GangApplication[] @relation("GangApplicationReviewer")
   addedSiteMembers       SiteMember[]        @relation("SiteMemberAddedBy")
   siteVisitors           SiteVisitor[]
   auditLogs              AuditLog[]          @relation("AuditActor")
@@ -123,6 +125,7 @@ model JobApplication {
   job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers     String?
   status      String   @default("pending")
   adminNotes  String?
   reviewedBy  String?
@@ -190,6 +193,25 @@ model StaffApplication {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   reviewedByUser User?  @relation("StaffApplicationReviewer", fields: [reviewedBy], references: [id])
+
+  @@index([status])
+  @@index([userId])
+}
+
+model GangApplication {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers     String
+  status      String   @default("pending")
+  adminNotes  String?
+  reviewedBy  String?
+  reviewedAt  DateTime?
+  submitterIp String?
+  submitterDiscordId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  reviewedByUser User?  @relation("GangApplicationReviewer", fields: [reviewedBy], references: [id])
 
   @@index([status])
   @@index([userId])

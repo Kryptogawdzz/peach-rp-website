@@ -25,6 +25,23 @@ type StaffApplication = {
   createdAt: string;
 };
 
+type GangApplication = {
+  id: string;
+  status: string;
+  createdAt: string;
+  answers?: string;
+};
+
+function getGangDisplayName(app: GangApplication) {
+  if (!app.answers) return "Gang application";
+  try {
+    const parsed = JSON.parse(app.answers) as Record<string, string>;
+    return parsed.gang_name || "Gang application";
+  } catch {
+    return "Gang application";
+  }
+}
+
 function getStatusLabel(status: string) {
   return status === "device_check" ? "device check" : status;
 }
@@ -41,10 +58,18 @@ function MyApplicationsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
-  const tab = tabParam === "jobs" ? "jobs" : tabParam === "staff" ? "staff" : "whitelist";
+  const tab =
+    tabParam === "jobs"
+      ? "jobs"
+      : tabParam === "staff"
+        ? "staff"
+        : tabParam === "gang"
+          ? "gang"
+          : "whitelist";
   const [whitelistApps, setWhitelistApps] = useState<WhitelistApplication[]>([]);
   const [jobApps, setJobApps] = useState<JobApplication[]>([]);
   const [staffApps, setStaffApps] = useState<StaffApplication[]>([]);
+  const [gangApps, setGangApps] = useState<GangApplication[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,11 +84,13 @@ function MyApplicationsContent() {
       fetch("/api/applications").then((r) => r.json()),
       fetch("/api/job-applications").then((r) => r.json()),
       fetch("/api/staff-applications").then((r) => r.json()),
+      fetch("/api/gang-applications").then((r) => r.json()),
     ])
-      .then(([wl, job, staff]) => {
+      .then(([wl, job, staff, gang]) => {
         if (Array.isArray(wl)) setWhitelistApps(wl);
         if (Array.isArray(job)) setJobApps(job);
         if (Array.isArray(staff)) setStaffApps(staff);
+        if (Array.isArray(gang)) setGangApps(gang);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -102,6 +129,12 @@ function MyApplicationsContent() {
           >
             New staff application
           </Link>
+          <Link
+            href="/apply/gang"
+            className="w-full rounded-lg border border-zinc-600 px-4 py-3 text-center text-sm font-medium text-zinc-300 transition hover:bg-zinc-800 sm:w-auto"
+          >
+            New gang application
+          </Link>
         </div>
       </div>
 
@@ -136,10 +169,50 @@ function MyApplicationsContent() {
         >
           Staff ({staffApps.length})
         </Link>
+        <Link
+          href="/applications?tab=gang"
+          className={`rounded-lg border px-4 py-3 text-sm font-medium transition sm:rounded-none sm:border-x-0 sm:border-t-0 sm:border-b-2 sm:py-2 ${
+            tab === "gang"
+              ? "brand-border brand-text bg-zinc-900/60"
+              : "border-zinc-800 text-zinc-500 hover:text-zinc-300"
+          }`}
+        >
+          Gang ({gangApps.length})
+        </Link>
       </div>
 
       {loading ? (
         <p className="text-zinc-500">Loading...</p>
+      ) : tab === "gang" ? (
+        gangApps.length === 0 ? (
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8 text-center">
+            <p className="text-zinc-400">You haven&apos;t submitted any gang applications yet.</p>
+            <Link href="/apply/gang" className="brand-text mt-4 inline-block hover:underline">
+              Apply for a gang →
+            </Link>
+          </div>
+        ) : (
+          <ul className="space-y-4">
+            {gangApps.map((app) => (
+              <li
+                key={app.id}
+                className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 transition hover:border-zinc-700"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-medium text-zinc-100">{getGangDisplayName(app)}</span>
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusClassName(app.status)}`}
+                  >
+                    {getStatusLabel(app.status)}
+                  </span>
+                </div>
+                <p className="mt-1 text-sm text-zinc-500">
+                  Submitted {new Date(app.createdAt).toLocaleDateString()}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )
       ) : tab === "staff" ? (
         staffApps.length === 0 ? (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8 text-center">

@@ -76,6 +76,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link href="/apply/gang" className="hover:text-amber-400">
+                Gang application
+              </Link>
+            </li>
+            <li>
               <Link href="/admin" className="hover:text-amber-400">
                 Admin panel
               </Link>
