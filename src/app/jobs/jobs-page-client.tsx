@@ -6,12 +6,20 @@ import { useSession } from "next-auth/react";
 
 const CATEGORY_COLORS: Record<string, string> = {
   "EMERGENCY SERVICES": "brand-soft brand-text ring-rose-500/30",
-  "CIVILIAN": "brand-soft brand-text ring-rose-500/30",
-  "CRIMINAL": "brand-soft brand-text ring-rose-500/30",
-  "BUSINESS": "brand-soft brand-text ring-rose-500/30",
-  "GOVERNMENT": "brand-soft brand-text ring-rose-500/30",
-  "MEDICAL": "brand-soft brand-text ring-rose-500/30",
-  "MECHANIC": "brand-soft brand-text ring-rose-500/30",
+  BUSINESS: "brand-soft brand-text ring-rose-500/30",
+  MEDICAL: "brand-soft brand-text ring-rose-500/30",
+  CRIMINAL: "brand-soft brand-text ring-rose-500/30",
+  STREETS: "brand-soft brand-text ring-rose-500/30",
+  GOVERNMENT: "brand-soft brand-text ring-rose-500/30",
+  MECHANIC: "brand-soft brand-text ring-rose-500/30",
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  BUSINESS: "Business",
+  "EMERGENCY SERVICES": "Emergency Services",
+  MEDICAL: "Medical",
+  CRIMINAL: "Criminal",
+  STREETS: "Streets",
 };
 
 type Job = {
@@ -109,7 +117,7 @@ export function JobsPageClient({
                   : "border-slate-700 bg-slate-900/70 text-slate-300 hover:border-slate-500 hover:text-white"
               }`}
             >
-              <span>{cat}</span>
+              <span>{CATEGORY_LABELS[cat] ?? cat}</span>
               <span className="rounded-full bg-black/20 px-2 py-0.5">
                 {countByCategory[cat] ?? 0}
               </span>
@@ -135,7 +143,7 @@ export function JobsPageClient({
                     CATEGORY_COLORS[job.category] ?? "bg-slate-700 text-slate-200 ring-slate-500/40"
                   }`}
                 >
-                  {job.category}
+                  {CATEGORY_LABELS[job.category] ?? job.category}
                 </span>
               </div>
 

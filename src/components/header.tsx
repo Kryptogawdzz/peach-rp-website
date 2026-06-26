@@ -16,6 +16,8 @@ export function Header() {
     { href: "/community", label: "Community" },
     { href: "/rules", label: "Rules" },
     { href: "/jobs", label: "Jobs" },
+    { href: "/apply/staff", label: "Staff" },
+    { href: "/apply/gang", label: "Gang" },
     { href: "/store", label: branding.storeNavLabel },
   ];
 
@@ -23,8 +25,6 @@ export function Header() {
     ...publicLinks,
     { href: "/applications", label: "My applications" },
     { href: "/apply", label: branding.whitelistNavLabel },
-    { href: "/apply/staff", label: "Staff" },
-    { href: "/apply/gang", label: "Gang" },
     ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
   ];
 

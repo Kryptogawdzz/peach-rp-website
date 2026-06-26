@@ -76,7 +76,9 @@ export default async function JobsPage() {
     };
   });
 
-  const categories = Array.from(new Set(jobs.map((j) => j.category))).sort();
+  const categories = appConfig.jobCategoryOrder.filter((cat) =>
+    jobs.some((job) => job.category === cat)
+  );
   const countByCategory = categories.reduce(
     (acc, cat) => {
       acc[cat] = jobs.filter((j) => j.category === cat).length;

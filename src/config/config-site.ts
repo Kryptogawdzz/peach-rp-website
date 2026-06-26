@@ -237,6 +237,9 @@ const CONFIG_SITE = {
     { id: "drug-plug", name: "Drug Plug", category: "CRIMINAL", description: "Underground narcotics supply" },
   ] as const,
 
+  /** Display order for job department filters on the Jobs page */
+  jobCategoryOrder: ["BUSINESS", "EMERGENCY SERVICES", "MEDICAL", "CRIMINAL"] as const,
+
   // ─── Job application form questions (per business id; edit in Admin → Forms) ─
   jobApplicationQuestions: {
     default: [
