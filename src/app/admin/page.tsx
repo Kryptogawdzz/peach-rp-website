@@ -8,6 +8,7 @@ import { AdminAuditLogList } from "@/components/admin-audit-log-list";
 import { AdminBrandingSettings } from "@/components/admin-branding-settings";
 import { AdminFormQuestionManager } from "@/components/admin-form-question-manager";
 import { AdminGangApplicationList } from "@/components/admin-gang-application-list";
+import { AdminJobDiscordRoles } from "@/components/admin-job-discord-roles";
 import { AdminJobApplicationList } from "@/components/admin-job-application-list";
 import { AdminStaffApplicationList } from "@/components/admin-staff-application-list";
 import { AdminMembersList } from "@/components/admin-members-list";
@@ -26,7 +27,8 @@ type AdminTab =
   | "branding"
   | "logs"
   | "forms"
-  | "rules";
+  | "rules"
+  | "discord-roles";
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -40,6 +42,7 @@ export default function AdminPage() {
   const canManageStoreCatalog = canManageStore(adminType);
   const canManageMembers = adminType === "full"; // only ADMIN_DISCORD_IDS
   const canManageBranding = adminType === "full";
+  const canManageDiscordRoles = adminType === "full";
   const canManageRules = userCanManageRules(adminType);
   const canViewLogs = canViewAuditLogs(adminType);
   const canManageForms = canManageWhitelist || canManageStaff || canManageJobs;
@@ -51,6 +54,7 @@ export default function AdminPage() {
     if (tab === "store" && canManageStoreCatalog) return tab;
     if (tab === "members" && canManageMembers) return tab;
     if (tab === "branding" && canManageBranding) return tab;
+    if (tab === "discord-roles" && canManageDiscordRoles) return tab;
     if (tab === "rules" && canManageRules) return tab;
     if (tab === "logs" && canViewLogs) return tab;
     if (tab === "forms" && canManageForms) return tab;
@@ -60,6 +64,7 @@ export default function AdminPage() {
     if (canManageStoreCatalog) return "store";
     if (canManageMembers) return "members";
     if (canManageBranding) return "branding";
+    if (canManageDiscordRoles) return "discord-roles";
     if (canManageRules) return "rules";
     if (canManageForms) return "forms";
     if (canViewLogs) return "logs";
@@ -72,6 +77,7 @@ export default function AdminPage() {
     canManageStoreCatalog,
     canManageMembers,
     canManageBranding,
+    canManageDiscordRoles,
     canManageRules,
     canViewLogs,
     canManageForms,
@@ -138,7 +144,7 @@ export default function AdminPage() {
     <div className="mx-auto max-w-5xl">
       <h1 className="mb-2 text-2xl font-bold text-zinc-900 dark:text-zinc-100">Admin</h1>
       <p className="mb-2 text-zinc-600 dark:text-zinc-400">
-        {[canManageWhitelist && "whitelist", canManageJobs && "job", canManageStaff && "staff", canManageStoreCatalog && "store catalog", canManageForms && "forms", canManageBranding && "branding", canManageRules && "rules", canViewLogs && "logs"]
+        {[canManageWhitelist && "whitelist", canManageJobs && "job", canManageStaff && "staff", canManageStoreCatalog && "store catalog", canManageForms && "forms", canManageBranding && "branding", canManageDiscordRoles && "discord roles", canManageRules && "rules", canViewLogs && "logs"]
           .filter(Boolean)
           .join(", ")}
         {" "}management.
@@ -246,6 +252,19 @@ export default function AdminPage() {
             Branding
           </button>
         )}
+        {canManageDiscordRoles && (
+          <button
+            type="button"
+            onClick={() => setTab("discord-roles")}
+            className={`rounded-lg border px-4 py-3 text-sm font-medium transition sm:rounded-none sm:border-x-0 sm:border-t-0 sm:border-b-2 sm:py-2 ${
+              activeTab === "discord-roles"
+                ? "brand-border brand-text bg-zinc-100/80 dark:bg-zinc-900/80"
+                : "border-zinc-200 text-zinc-500 hover:text-zinc-700 dark:border-zinc-800 dark:hover:text-zinc-300"
+            }`}
+          >
+            Discord roles
+          </button>
+        )}
         {canManageRules && (
           <button
             type="button"
@@ -302,6 +321,8 @@ export default function AdminPage() {
                     ? "Manage members"
                     : activeTab === "branding"
                       ? "Branding"
+                      : activeTab === "discord-roles"
+                        ? "Discord roles"
                       : activeTab === "rules"
                         ? "Rules"
                         : activeTab === "forms"
@@ -318,6 +339,7 @@ export default function AdminPage() {
       {activeTab === "store" && <AdminStoreManager />}
       {activeTab === "members" && <AdminMembersList isFullAdmin={adminType === "full"} />}
       {activeTab === "branding" && <AdminBrandingSettings />}
+      {activeTab === "discord-roles" && <AdminJobDiscordRoles />}
       {activeTab === "rules" && <AdminRulesManager />}
       {activeTab === "forms" && <AdminFormQuestionManager />}
       {activeTab === "logs" && <AdminAuditLogList />}

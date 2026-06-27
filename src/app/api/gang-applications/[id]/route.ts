@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth, resolveSessionUserId, unauthorizedOrDatabaseError } from "@/auth";
 import { sendDecisionDM } from "@/lib/discord-dm";
+import { grantGangMemberDiscordRole } from "@/lib/job-discord-roles";
 import { prisma } from "@/lib/prisma";
 import { createAuditLog } from "@/lib/audit";
 import { getClientIp } from "@/lib/request";
@@ -53,6 +54,22 @@ export async function PATCH(
       status
     ).catch((e) => console.error("[discord-dm] Gang application DM failed:", e));
 
+    let discordRoleGranted: boolean | null = null;
+    let discordRoleId: string | null = null;
+    if (status === "approved" && application.user?.discordId) {
+      const roleResult = await grantGangMemberDiscordRole(application.user.discordId).catch((e) => {
+        console.error("[job-discord-roles] Gang member role grant failed:", e);
+        return { granted: false, roleId: null };
+      });
+      discordRoleGranted = roleResult.granted;
+      discordRoleId = roleResult.roleId;
+      if (!roleResult.granted && roleResult.roleId) {
+        console.warn(
+          "[job-discord-roles] Gang member role was not assigned. Check bot permissions and that the user is in the server."
+        );
+      }
+    }
+
     await createAuditLog({
       action: status === "approved" ? "gang_application_approved" : "gang_application_rejected",
       entityType: "gang_application",
@@ -65,6 +82,8 @@ export async function PATCH(
         status,
         adminNotes: application.adminNotes,
         applicantUsername: application.user.username,
+        discordRoleGranted,
+        discordRoleId,
       },
     });
 

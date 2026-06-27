@@ -87,6 +87,15 @@ DISCORD_DEVICE_CHECK_ROLE_ID=your_device_check_role_id
 # When a staff application is approved, the bot grants this role to the user
 DISCORD_STAFF_ROLE_ID=your_staff_role_id
 
+# Job & gang roles — granted when job/gang applications are approved (optional)
+# Full admins can also edit these in Admin → Discord roles (saved values override env)
+DISCORD_PD_ROLE_ID=1365774899649577055
+DISCORD_EMS_ROLE_ID=1430397410387038228
+DISCORD_REAL_ESTATE_ROLE_ID=1368489270020411462
+DISCORD_BUSINESS_OWNER_ROLE_ID=1520219919482884326
+DISCORD_DRUG_GUN_PLUG_ROLE_ID=1520219412592857222
+DISCORD_GANG_MEMBER_ROLE_ID=1341115198064431264
+
 # Author name shown on DM embeds (optional, default: "Whitelist System")
 # DISCORD_DM_AUTHOR_NAME=Your Server Name
 

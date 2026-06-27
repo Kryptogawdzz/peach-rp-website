@@ -251,6 +251,7 @@ model SiteSettings {
   dmTemplatesJson         String?
   homepageContentJson     String?
   logsWebhookUrl          String?
+  jobDiscordRoleIdsJson   String?
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
 }

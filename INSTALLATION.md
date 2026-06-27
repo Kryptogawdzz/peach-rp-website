@@ -145,6 +145,13 @@ DISCORD_GUILD_ID=your_discord_server_id
 DISCORD_WHITELIST_ROLE_ID=your_whitelist_role_id
 DISCORD_DEVICE_CHECK_ROLE_ID=your_device_check_role_id
 DISCORD_STAFF_ROLE_ID=your_staff_role_id
+# Job & gang roles — granted when job/gang applications are approved (optional)
+DISCORD_PD_ROLE_ID=your_pd_role_id
+DISCORD_EMS_ROLE_ID=your_ems_role_id
+DISCORD_REAL_ESTATE_ROLE_ID=your_real_estate_role_id
+DISCORD_BUSINESS_OWNER_ROLE_ID=your_business_owner_role_id
+DISCORD_DRUG_GUN_PLUG_ROLE_ID=your_drug_gun_plug_role_id
+DISCORD_GANG_MEMBER_ROLE_ID=your_gang_member_role_id
 TEAM_ADMIN_DISCORD_IDS=comma,separated,ids
 JOBS_ADMIN_DISCORD_IDS=comma,separated,ids
 ```
@@ -157,6 +164,13 @@ Explanation:
 - `DISCORD_WHITELIST_ROLE_ID`: role granted after whitelist approval
 - `DISCORD_DEVICE_CHECK_ROLE_ID`: role granted when moved to device check
 - `DISCORD_STAFF_ROLE_ID`: role granted after staff approval
+- `DISCORD_PD_ROLE_ID`: role granted when Peach PD job application is approved
+- `DISCORD_EMS_ROLE_ID`: role granted when Peach Medical job application is approved
+- `DISCORD_REAL_ESTATE_ROLE_ID`: role granted when Peach Realty job application is approved
+- `DISCORD_BUSINESS_OWNER_ROLE_ID`: role granted when Peach Mechanics job application is approved
+- `DISCORD_DRUG_GUN_PLUG_ROLE_ID`: role granted when Gun Plug or Drug Plug job application is approved
+- `DISCORD_GANG_MEMBER_ROLE_ID`: role granted when a gang application is approved
+- Full admins can override these in **Admin → Discord roles** (saved values take priority over env)
 - `TEAM_ADMIN_DISCORD_IDS`: team admins for whitelist/staff management
 - `JOBS_ADMIN_DISCORD_IDS`: job admins for job application management
 

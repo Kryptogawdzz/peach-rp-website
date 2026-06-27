@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth, resolveSessionUserId, unauthorizedOrDatabaseError } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { sendDecisionDM } from "@/lib/discord-dm";
+import { grantJobDiscordRoleForJobTitle } from "@/lib/job-discord-roles";
 import { createAuditLog } from "@/lib/audit";
 import { getClientIp } from "@/lib/request";
 
@@ -54,6 +55,26 @@ export async function PATCH(
       },
       status
     ).catch((e) => console.error("[discord-dm] Job application DM failed:", e));
+
+    let discordRoleGranted: boolean | null = null;
+    let discordRoleId: string | null = null;
+    if (status === "approved" && application.user?.discordId) {
+      const roleResult = await grantJobDiscordRoleForJobTitle(
+        application.user.discordId,
+        application.job.title
+      ).catch((e) => {
+        console.error("[job-discord-roles] Job role grant failed:", e);
+        return { granted: false, slot: null, roleId: null };
+      });
+      discordRoleGranted = roleResult.granted;
+      discordRoleId = roleResult.roleId;
+      if (!roleResult.granted && roleResult.roleId) {
+        console.warn(
+          `[job-discord-roles] Role was not assigned for ${application.job.title}. Check bot permissions and that the user is in the server.`
+        );
+      }
+    }
+
     await createAuditLog({
       action: status === "approved" ? "job_application_approved" : "job_application_rejected",
       entityType: "job_application",
@@ -67,6 +88,8 @@ export async function PATCH(
         adminNotes: application.adminNotes,
         jobTitle: application.job.title,
         applicantUsername: application.user.username,
+        discordRoleGranted,
+        discordRoleId,
       },
     });
     return NextResponse.json(application);
